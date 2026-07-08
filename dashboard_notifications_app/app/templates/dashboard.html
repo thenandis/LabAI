@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block body %}
+<header class="topbar">
+  <div class="brand-row compact">
+    <span class="brand-mark">LA</span>
+    <div>
+      <h1>Event Dashboard</h1>
+      <p>Command, mediator, observer flow</p>
+    </div>
+  </div>
+  <form method="post" action="/logout">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit" class="icon-button" title="Sign out">
+      <i data-lucide="log-out"></i>
+    </button>
+  </form>
+</header>
+
+<main class="dashboard-grid">
+  <section class="metric-strip" aria-label="System metrics">
+    <div class="metric">
+      <span>Outbox</span>
+      <strong>{{ snapshot.pending_outbox }}</strong>
+    </div>
+    <div class="metric">
+      <span>Commands</span>
+      <strong>{{ snapshot.recent_commands | length }}</strong>
+    </div>
+    <div class="metric">
+      <span>Events</span>
+      <strong>{{ snapshot.recent_events | length }}</strong>
+    </div>
+    <div class="metric">
+      <span>Notifications</span>
+      <strong>{{ snapshot.recent_notifications | length }}</strong>
+    </div>
+  </section>
+
+  <section class="panel command-forms">
+    <div class="panel-heading">
+      <h2>Commands</h2>
+      <span class="chip">Mediator</span>
+    </div>
+    <div class="form-grid">
+      <form
+        class="stack-form"
+        hx-post="/api/commands"
+        hx-target="#commands-panel"
+        hx-swap="innerHTML"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="command_type" value="GenerateInvoiceCommand">
+        <label>
+          Customer
+          <input name="customer_name" value="Avery Carter" required>
+        </label>
+        <label>
+          Email
+          <input name="customer_email" type="email" value="avery@example.com" required>
+        </label>
+        <div class="inline-fields">
+          <label>
+            Amount
+            <input name="amount_dollars" inputmode="decimal" value="249.00" required>
+          </label>
+          <label>
+            Currency
+            <input name="currency" value="USD" maxlength="3" required>
+          </label>
+        </div>
+        <label>
+          Due date
+          <input name="due_date" type="date">
+        </label>
+        <label>
+          Memo
+          <textarea name="memo" rows="2">Dashboard implementation milestone</textarea>
+        </label>
+        <button type="submit" class="primary-button">
+          <i data-lucide="receipt-text"></i>
+          Generate invoice
+        </button>
+      </form>
+
+      <form
+        class="stack-form"
+        hx-post="/api/commands"
+        hx-target="#commands-panel"
+        hx-swap="innerHTML"
+      >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="command_type" value="SendNotificationCommand">
+        <label>
+          Channel
+          <select name="channel">
+            <option value="email">Email</option>
+            <option value="sms">SMS</option>
+          </select>
+        </label>
+        <label>
+          Recipient
+          <input name="recipient" value="ops@example.com" required>
+        </label>
+        <label>
+          Subject
+          <input name="subject" value="LabAI notification">
+        </label>
+        <label>
+          Message
+          <textarea name="message" rows="5" required>Observer fan-out check from the LabAI dashboard.</textarea>
+        </label>
+        <button type="submit" class="secondary-button">
+          <i data-lucide="send"></i>
+          Send notification
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section class="panel" id="commands-panel" hx-get="/partials/commands" hx-trigger="load, every 5s" hx-swap="innerHTML">
+    {% include "partials/command_table.html" %}
+  </section>
+
+  <section class="panel" id="events-panel" hx-get="/partials/events" hx-trigger="load, every 5s" hx-swap="innerHTML">
+    {% include "partials/event_timeline.html" %}
+  </section>
+
+  <section class="panel" id="notifications-panel" hx-get="/partials/notifications" hx-trigger="load, every 5s" hx-swap="innerHTML">
+    {% include "partials/notification_list.html" %}
+  </section>
+
+  <section class="panel" id="observers-panel" hx-get="/partials/observers" hx-trigger="load, every 5s" hx-swap="innerHTML">
+    {% include "partials/observer_health.html" %}
+  </section>
+
+  <section class="panel agent-panel">
+    <div class="panel-heading">
+      <h2>AI Operator</h2>
+      <span class="chip accent">MCP</span>
+    </div>
+    <form
+      class="agent-form"
+      hx-post="/api/agent/query"
+      hx-target="#agent-response"
+      hx-swap="innerHTML"
+    >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <textarea name="query" rows="3" required>Summarize current command and observer health.</textarea>
+      <button type="submit" class="primary-button">
+        <i data-lucide="sparkles"></i>
+        Ask agent
+      </button>
+    </form>
+    <div id="agent-response" class="agent-response">
+      <p>Ready.</p>
+    </div>
+  </section>
+</main>
+{% endblock %}
+

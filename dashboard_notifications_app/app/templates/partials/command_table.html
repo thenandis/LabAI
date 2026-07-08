@@ -1,0 +1,33 @@
+<div class="panel-heading">
+  <h2>Command Status</h2>
+  <span class="chip">Kafka input</span>
+</div>
+{% if commands %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Actor</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for command in commands %}
+          <tr>
+            <td class="mono">{{ command.id }}</td>
+            <td>{{ command.command_type.replace("Command", "") }}</td>
+            <td><span class="status status-{{ command.status }}">{{ command.status }}</span></td>
+            <td>{{ command.actor }}</td>
+            <td>{{ command.created_at.strftime("%b %d %H:%M:%S") }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="empty-state">No commands yet.</p>
+{% endif %}
+

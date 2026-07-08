@@ -1,0 +1,9 @@
+.venv/
+labai_dashboard.db
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+

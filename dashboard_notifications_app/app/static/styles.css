@@ -1,0 +1,411 @@
+:root {
+  color-scheme: light;
+  --ink: #172026;
+  --muted: #65717b;
+  --line: #d9e1e5;
+  --surface: #ffffff;
+  --page: #f4f7f8;
+  --teal: #007c7a;
+  --teal-dark: #005f5d;
+  --amber: #b56b00;
+  --green: #157a43;
+  --red: #b42318;
+  --blue: #2458a6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--page);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  min-height: 2.5rem;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-row.compact h1 {
+  font-size: 1.1rem;
+}
+
+.brand-row h1,
+.brand-row p {
+  margin: 0;
+}
+
+.brand-row p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.5rem;
+  background: var(--teal);
+  color: white;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(22rem, 0.7fr);
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem) 2rem;
+}
+
+.metric-strip {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metric,
+.panel,
+.login-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+
+.metric {
+  padding: 1rem;
+}
+
+.metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.6rem;
+}
+
+.panel {
+  padding: 1rem;
+  min-width: 0;
+}
+
+.command-forms,
+.agent-panel {
+  grid-column: 1 / -1;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.6rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: #e6f3f2;
+  color: var(--teal-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.chip.accent {
+  background: #fff1da;
+  color: var(--amber);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stack-form,
+.agent-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.65rem 0.7rem;
+  color: var(--ink);
+  background: white;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.inline-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7rem;
+  gap: 0.75rem;
+}
+
+.primary-button,
+.secondary-button,
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.primary-button {
+  background: var(--teal);
+  color: white;
+}
+
+.primary-button:hover {
+  background: var(--teal-dark);
+}
+
+.secondary-button {
+  background: var(--blue);
+  color: white;
+}
+
+.icon-button {
+  width: 2.5rem;
+  padding: 0;
+  color: var(--ink);
+  background: #eef3f5;
+}
+
+button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th,
+td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.mono {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: #eef3f5;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-completed,
+.status-delivered,
+.status-sent,
+.status-simulated {
+  background: #e8f6ee;
+  color: var(--green);
+}
+
+.status-failed {
+  background: #fdebea;
+  color: var(--red);
+}
+
+.status-processing,
+.status-pending,
+.status-retrying {
+  background: #fff1da;
+  color: var(--amber);
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 0.8rem minmax(0, 1fr);
+  gap: 0.65rem;
+}
+
+.timeline p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+}
+
+.timeline-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+.notification-list,
+.observer-grid {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.notification-row,
+.observer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+}
+
+.notification-row p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.observer-row em {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  border-radius: 50%;
+  background: #eef3f5;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.agent-form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+}
+
+.agent-response {
+  margin-top: 0.8rem;
+  padding: 0.85rem;
+  border-left: 4px solid var(--teal);
+  background: #f7fbfb;
+}
+
+.agent-response p,
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.login-panel {
+  width: min(100%, 25rem);
+  padding: 1.25rem;
+}
+
+.form-error {
+  margin: 1rem 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.4rem;
+  background: #fdebea;
+  color: var(--red);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid,
+  .form-grid,
+  .agent-form,
+  .metric-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-fields {
+    grid-template-columns: 1fr;
+  }
+}
+

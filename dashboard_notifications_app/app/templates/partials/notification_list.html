@@ -1,0 +1,20 @@
+<div class="panel-heading">
+  <h2>Notifications</h2>
+  <span class="chip">Observers</span>
+</div>
+{% if notifications %}
+  <div class="notification-list">
+    {% for notification in notifications %}
+      <article class="notification-row">
+        <div>
+          <strong>{{ notification.channel | upper }}</strong>
+          <p>{{ notification.recipient }}</p>
+        </div>
+        <span class="status status-{{ notification.status }}">{{ notification.status }}</span>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty-state">No notifications yet.</p>
+{% endif %}
+

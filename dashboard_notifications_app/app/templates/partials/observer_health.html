@@ -1,0 +1,14 @@
+<div class="panel-heading">
+  <h2>Observer Health</h2>
+  <span class="chip">Delivery groups</span>
+</div>
+<div class="observer-grid">
+  {% for row in observer_health %}
+    <div class="observer-row">
+      <span>{{ row.observer_name }}</span>
+      <strong>{{ row.status }}</strong>
+      <em>{{ row.count }}</em>
+    </div>
+  {% endfor %}
+</div>
+

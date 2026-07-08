@@ -1,0 +1,21 @@
+<div class="panel-heading">
+  <h2>Event Timeline</h2>
+  <span class="chip">Fan-out</span>
+</div>
+{% if events %}
+  <ol class="timeline">
+    {% for event in events %}
+      <li>
+        <span class="timeline-dot"></span>
+        <div>
+          <strong>{{ event.event_type.replace("Event", "") }}</strong>
+          <p class="mono">{{ event.id }}</p>
+          <p>Command {{ event.command_id or "external" }} at {{ event.occurred_at.strftime("%b %d %H:%M:%S") }}</p>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p class="empty-state">No events yet.</p>
+{% endif %}
+

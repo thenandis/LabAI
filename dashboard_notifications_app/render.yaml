@@ -1,0 +1,153 @@
+databases:
+  - name: labai-dashboard-db
+    databaseName: labai_dashboard
+    user: labai
+    plan: basic-256mb
+
+envVarGroups:
+  - name: labai-shared-secrets
+    envVars:
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SECURITY_PROTOCOL
+        value: SASL_SSL
+      - key: KAFKA_SASL_MECHANISM
+        value: PLAIN
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5-nano
+      - key: MCP_SERVER_TOKEN
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM_EMAIL
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+
+services:
+  - type: web
+    name: labai-dashboard-web
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    renderSubdomainPolicy: disabled
+    domains:
+      - earthymix.com
+      - www.earthymix.com
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_BASE_URL
+        value: https://earthymix.com
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
+  - type: worker
+    name: labai-outbox-dispatcher
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.workers.outbox_dispatcher
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
+  - type: worker
+    name: labai-command-worker
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.workers.command_worker
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
+  - type: worker
+    name: labai-email-observer
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.observers.email
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
+  - type: worker
+    name: labai-sms-observer
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.observers.sms
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
+  - type: worker
+    name: labai-analytics-observer
+    runtime: python
+    rootDir: dashboard_notifications_app
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.observers.analytics
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: labai-dashboard-db
+          property: connectionString
+      - key: APP_ENV
+        value: production
+      - fromGroup: labai-shared-secrets
+
