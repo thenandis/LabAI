@@ -1,0 +1,15 @@
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.GeneratedMSBuildEditorConfig.editorconfig
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.AssemblyInfoInputs.cache
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.AssemblyInfo.cs
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.csproj.CoreCompileInputs.cache
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.sourcelink.json
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/bin/Debug/net10.0/CSharpDev
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/bin/Debug/net10.0/CSharpDev.deps.json
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/bin/Debug/net10.0/CSharpDev.runtimeconfig.json
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/bin/Debug/net10.0/CSharpDev.dll
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/bin/Debug/net10.0/CSharpDev.pdb
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.dll
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/refint/CSharpDev.dll
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.pdb
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/CSharpDev.genruntimeconfig.cache
+/Users/TheNandis/Desktop/CMU icl/AILab/LabAI/LabAI/CSharpDev/obj/Debug/net10.0/ref/CSharpDev.dll
