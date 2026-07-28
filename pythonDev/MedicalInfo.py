@@ -56,3 +56,44 @@ def get_distinct_visitors_by_year(df_clinic, unique_visitors_df, year: int):
 medical_info = get_distinct_visitors_by_year(df_clinic, df_unique_visitors, 2025)
 print(medical_info)
 
+
+def fetch_aggregates_from_postgres(conn_params: dict, year: int):
+        """Fetch clinic-year aggregates from Postgres.
+
+        conn_params: dict passed to psycopg2.connect, e.g. {'host':'', 'dbname':'', 'user':'', 'password':''}
+        Returns a DataFrame with columns Clinic, Year, Visits, VisitorId, VisitorIds, DistinctVisitors
+        """
+        import psycopg2
+        import pandas as pd
+
+        sql = """
+        SELECT
+            clinic_id AS clinic,
+            EXTRACT(YEAR FROM visit_date)::INT AS year,
+            SUM(visits) AS visits,
+            COUNT(DISTINCT visitor_id) AS distinctvisitors,
+            array_agg(DISTINCT visitor_id) AS visitorids
+        FROM visits
+        WHERE EXTRACT(YEAR FROM visit_date)::INT = %s
+        GROUP BY clinic, year
+        ORDER BY clinic, year
+        """
+
+        conn = psycopg2.connect(**conn_params)
+        df = pd.read_sql(sql, conn, params=(year,))
+        conn.close()
+
+        # Normalize column names to match in-memory function
+        df = df.rename(columns={
+                'clinic': 'Clinic',
+                'year': 'Year',
+                'visits': 'Visits',
+                'distinctvisitors': 'DistinctVisitors',
+                'visitorids': 'VisitorIds'
+        })
+
+        df['VisitorIds'] = df['VisitorIds'].apply(lambda x: x if isinstance(x, list) else [])
+        df['VisitorId'] = df['VisitorIds'].apply(lambda ids: ids[0] if len(ids) == 1 else ids)
+
+        return df[['Clinic', 'Year', 'Visits', 'VisitorId', 'VisitorIds', 'DistinctVisitors']]
+
