@@ -8,7 +8,8 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="listIsUs.cs" />
+    <!-- <Compile Include="listIsUs.cs" /> -->
+    <Compile Include="test1.cs" />
   </ItemGroup>
 
 </Project>
