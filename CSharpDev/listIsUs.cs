@@ -19,6 +19,11 @@ class Program
             new List<string> { "4", "Canada" }
         };
 
+// Get the midpoint of the list 
+//if count is even then midpoint is left of the two middle elements
+//int midPoint = countryList.Count / 2;
+
+
         Dictionary<string, int> countryCounts = CountCountries(countryList);
 
         foreach (var kvp in countryCounts)
