@@ -1,0 +1,140 @@
+<!--
+  Angular's built-in control flow (@if / @for / @empty) replaced *ngIf / *ngFor in v17+.
+  It's faster (compiled to plain instructions, no directive overhead) and needs no imports.
+-->
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h1 class="page__title">Products</h1>
+      <p class="page__subtitle">{{ store.totalCount() }} products in the Northwind catalog</p>
+    </div>
+    <a routerLink="new" class="btn btn--primary">+ New product</a>
+  </header>
+
+  <!-- ===== Toolbar: search + filters ===== -->
+  <div class="toolbar" role="search">
+    <label class="field field--grow">
+      <span class="sr-only">Search products</span>
+      <input type="search" class="input" placeholder="Search by name…" [formControl]="searchControl" autocomplete="off" />
+    </label>
+
+    <label class="field">
+      <span class="sr-only">Category</span>
+      <select class="input" [value]="store.currentQuery().categoryId ?? ''" (change)="onCategoryChange($any($event.target).value)">
+        <option value="">All categories</option>
+        @for (c of categories(); track c.id) {
+          <option [value]="c.id">{{ c.name }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="checkbox">
+      <input
+        type="checkbox"
+        [checked]="store.currentQuery().includeDiscontinued"
+        (change)="store.setIncludeDiscontinued($any($event.target).checked)"
+      />
+      Show discontinued
+    </label>
+  </div>
+
+  <!-- ===== States: error / empty / data ===== -->
+  @if (store.error(); as error) {
+    <div class="alert alert--error" role="alert">
+      <span>{{ error }}</span>
+      <button type="button" class="btn btn--ghost" (click)="store.reload()">Retry</button>
+    </div>
+  } @else if (store.isEmpty()) {
+    <div class="empty-state">
+      <p>No products match your filters.</p>
+      <a routerLink="new" class="btn btn--primary">Create a product</a>
+    </div>
+  } @else {
+    <!-- aria-busy tells assistive tech the region is updating -->
+    <div class="table-wrap" [class.is-loading]="store.loading()" [attr.aria-busy]="store.loading()">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col" [attr.aria-sort]="ariaSort('name')">
+              <button type="button" class="sort-btn" (click)="store.toggleSort('name')">Name {{ sortIndicator('name') }}</button>
+            </th>
+            <th scope="col" [attr.aria-sort]="ariaSort('category')">
+              <button type="button" class="sort-btn" (click)="store.toggleSort('category')">Category {{ sortIndicator('category') }}</button>
+            </th>
+            <th scope="col" class="hide-md">Supplier</th>
+            <th scope="col" class="num" [attr.aria-sort]="ariaSort('unitPrice')">
+              <button type="button" class="sort-btn" (click)="store.toggleSort('unitPrice')">Price {{ sortIndicator('unitPrice') }}</button>
+            </th>
+            <th scope="col" class="num" [attr.aria-sort]="ariaSort('unitsInStock')">
+              <button type="button" class="sort-btn" (click)="store.toggleSort('unitsInStock')">Stock {{ sortIndicator('unitsInStock') }}</button>
+            </th>
+            <th scope="col">Status</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- track p.id: Angular reuses DOM rows by identity, a big win on re-renders -->
+          @for (p of store.products(); track p.id) {
+            <tr>
+              <!-- data-label is shown as the field caption in the mobile "card" layout -->
+              <td data-label="Name" class="cell-title">{{ p.name }}</td>
+              <td data-label="Category">{{ p.categoryName ?? '—' }}</td>
+              <td data-label="Supplier" class="hide-md">{{ p.supplierName ?? '—' }}</td>
+              <td data-label="Price" class="num">{{ p.unitPrice | currency }}</td>
+              <td data-label="Stock" class="num">{{ p.unitsInStock }}</td>
+              <td data-label="Status">
+                @if (p.discontinued) {
+                  <span class="badge badge--muted">Discontinued</span>
+                } @else if (p.needsReorder) {
+                  <span class="badge badge--warn">Reorder</span>
+                } @else {
+                  <span class="badge badge--ok">Active</span>
+                }
+              </td>
+              <td class="actions">
+                <a [routerLink]="[p.id, 'edit']" class="btn btn--ghost btn--sm" [attr.aria-label]="'Edit ' + p.name">Edit</a>
+                <button type="button" class="btn btn--danger-ghost btn--sm" (click)="askDelete(p)" [attr.aria-label]="'Delete ' + p.name">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <!-- First load: skeleton rows reserve the space, so the layout doesn't jump -->
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <tr class="skeleton-row" aria-hidden="true">
+                <td colspan="7"><span class="skeleton"></span></td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="list-footer">
+      <label class="field field--inline">
+        Rows
+        <select class="input input--sm" [value]="store.currentQuery().pageSize" (change)="store.setPageSize(+$any($event.target).value)">
+          @for (size of pageSizes; track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+        </select>
+      </label>
+
+      <app-pagination [page]="store.page()" [totalPages]="store.totalPages()" (pageChange)="store.setPage($event)" />
+    </footer>
+  }
+</section>
+
+<!-- Native <dialog>: built-in focus trap, Esc to close, ::backdrop, and accessible by default -->
+<dialog #deleteDialog class="dialog" (close)="pendingDelete.set(null)" aria-labelledby="delete-title">
+  <h2 id="delete-title" class="dialog__title">Delete product?</h2>
+  <p>
+    <strong>{{ pendingDelete()?.name }}</strong> will be permanently removed. This can't be undone.
+  </p>
+  <div class="dialog__actions">
+    <button type="button" class="btn btn--ghost" (click)="cancelDelete()" [disabled]="deleting()">Cancel</button>
+    <button type="button" class="btn btn--danger" (click)="confirmDelete()" [disabled]="deleting()">
+      {{ deleting() ? 'Deleting…' : 'Delete' }}
+    </button>
+  </div>
+</dialog>

@@ -1,0 +1,19 @@
+# .NET
+**/bin/
+**/obj/
+**/TestResults/
+*.user
+.vs/
+
+# Local SQLite dev database
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
+# Angular
+AngularUI/node_modules/
+AngularUI/dist/
+AngularUI/.angular/
+
+# Secrets
+.env

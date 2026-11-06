@@ -1,0 +1,28 @@
+<!--
+  PRESENTATION / HOST LAYER: the ASP.NET Core Minimal API.
+  Its job is thin: HTTP in -> call an Application service -> HTTP out.
+  It is also the "composition root", the one place where all the layers are wired
+  together with dependency injection (Program.cs).
+-->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <RootNamespace>SharpAPI.Api</RootNamespace>
+    <UserSecretsId>sharpapi-northwind-catalog</UserSecretsId>
+    <!-- Server GC + concurrent GC give the best throughput for web workloads -->
+    <ServerGarbageCollector>true</ServerGarbageCollector>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <!-- Tiered PGO (on by default since .NET 8): the JIT re-optimises hot paths using real runtime data -->
+    <TieredPGO>true</TieredPGO>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpAPI.Application\SharpAPI.Application.csproj" />
+    <ProjectReference Include="..\SharpAPI.Infrastructure\SharpAPI.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="SharpAPI.IntegrationTests" />
+  </ItemGroup>
+</Project>

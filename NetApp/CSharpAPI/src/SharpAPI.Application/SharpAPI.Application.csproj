@@ -1,0 +1,23 @@
+<!--
+  APPLICATION LAYER: use cases (what the system does).
+  Depends only on Domain. It DEFINES interfaces (IProductRepository, IUnitOfWork...)
+  and Infrastructure IMPLEMENTS them. This is the Dependency Inversion Principle:
+  high-level policy never references low-level details such as EF Core or SQL Server.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>SharpAPI.Application</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpAPI.Domain\SharpAPI.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Unit tests can see internal types -->
+    <InternalsVisibleTo Include="SharpAPI.UnitTests" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http (SQLite, zero install)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "scalar",
+      "applicationUrl": "http://localhost:5080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "http (SQL Server in Docker)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "scalar",
+      "applicationUrl": "http://localhost:5080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Database__Provider": "SqlServer",
+        "Database__InitializeOnStartup": "false",
+        "ConnectionStrings__Catalog": "Server=localhost,1433;Database=NorthwindCatalog;User Id=catalog_api;Password=Catalog_Api_Passw0rd!;TrustServerCertificate=True;Encrypt=True"
+      }
+    }
+  }
+}

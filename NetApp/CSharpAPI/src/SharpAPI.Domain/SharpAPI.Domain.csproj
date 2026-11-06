@@ -1,0 +1,10 @@
+<!--
+  DOMAIN LAYER: the core of Clean Architecture.
+  Holds entities and business rules, and has ZERO dependencies (no EF Core, no
+  ASP.NET, no NuGet packages). Every other layer depends on it; it depends on nothing.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>SharpAPI.Domain</RootNamespace>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,100 @@
+<section class="page page--narrow">
+  <header class="page__header">
+    <div>
+      <a routerLink="/products" class="back-link">‹ Back to products</a>
+      <h1 class="page__title">{{ isEdit() ? 'Edit product' : 'New product' }}</h1>
+    </div>
+  </header>
+
+  @if (loadError(); as error) {
+    <div class="alert alert--error" role="alert">
+      <span>{{ error }}</span>
+      <a routerLink="/products" class="btn btn--ghost">Back to list</a>
+    </div>
+  } @else if (loading()) {
+    <div class="card"><span class="skeleton skeleton--block"></span></div>
+  } @else {
+    <!-- 409 Conflict banner: another user saved first. Reloading fetches their version + a fresh rowVersion. -->
+    @if (conflict(); as c) {
+      <div class="alert alert--warn" role="alert">
+        <span>{{ c.detail }}</span>
+        <button type="button" class="btn btn--ghost" (click)="load()">Reload latest</button>
+      </div>
+    }
+
+    <!-- novalidate: we render our own messages rather than the browser's tooltips -->
+    <form class="card form-grid" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label class="field form-grid__full">
+        <span class="field__label">Name <span class="req" aria-hidden="true">*</span></span>
+        <input class="input" formControlName="name" maxlength="40" autocomplete="off"
+               [attr.aria-invalid]="showError('name')" aria-describedby="name-error" />
+        @if (showError('name')) { <span id="name-error" class="field__error">{{ errorFor('name') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Category</span>
+        <select class="input" formControlName="categoryId" [attr.aria-invalid]="showError('categoryId')">
+          <option [ngValue]="null">— None —</option>
+          @for (c of categories(); track c.id) {
+            <option [ngValue]="c.id">{{ c.name }}</option>
+          }
+        </select>
+        @if (showError('categoryId')) { <span class="field__error">{{ errorFor('categoryId') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Supplier</span>
+        <select class="input" formControlName="supplierId" [attr.aria-invalid]="showError('supplierId')">
+          <option [ngValue]="null">— None —</option>
+          @for (s of suppliers(); track s.id) {
+            <option [ngValue]="s.id">{{ s.name }}</option>
+          }
+        </select>
+        @if (showError('supplierId')) { <span class="field__error">{{ errorFor('supplierId') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Quantity per unit</span>
+        <input class="input" formControlName="quantityPerUnit" maxlength="20" placeholder="e.g. 24 - 12 oz bottles" />
+        @if (showError('quantityPerUnit')) { <span class="field__error">{{ errorFor('quantityPerUnit') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Unit price ($) <span class="req" aria-hidden="true">*</span></span>
+        <input class="input" type="number" inputmode="decimal" step="0.01" min="0" formControlName="unitPrice"
+               [attr.aria-invalid]="showError('unitPrice')" />
+        @if (showError('unitPrice')) { <span class="field__error">{{ errorFor('unitPrice') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Units in stock</span>
+        <input class="input" type="number" inputmode="numeric" min="0" step="1" formControlName="unitsInStock" />
+        @if (showError('unitsInStock')) { <span class="field__error">{{ errorFor('unitsInStock') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Units on order</span>
+        <input class="input" type="number" inputmode="numeric" min="0" step="1" formControlName="unitsOnOrder" />
+        @if (showError('unitsOnOrder')) { <span class="field__error">{{ errorFor('unitsOnOrder') }}</span> }
+      </label>
+
+      <label class="field">
+        <span class="field__label">Reorder level</span>
+        <input class="input" type="number" inputmode="numeric" min="0" step="1" formControlName="reorderLevel" />
+        @if (showError('reorderLevel')) { <span class="field__error">{{ errorFor('reorderLevel') }}</span> }
+      </label>
+
+      <label class="checkbox form-grid__full">
+        <input type="checkbox" formControlName="discontinued" />
+        Discontinued (no longer sold)
+      </label>
+
+      <div class="form-actions form-grid__full">
+        <a routerLink="/products" class="btn btn--ghost">Cancel</a>
+        <button type="submit" class="btn btn--primary" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create product' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

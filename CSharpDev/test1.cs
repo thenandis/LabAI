@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// To run in terminal (navigate to project directory) -> dotnet run --project CSharpDev.csproj
+
 // Practice set modeled after a typical CodeSignal-style coding assessment.
 // Four stages of increasing difficulty, each with a solution + quick self-tests in Main.
 
@@ -10,10 +12,50 @@ public static class Program
 {
     public static void Main()
     {
-        Stage1_Warmup();
-        Stage2_Easy();
-        Stage3_Medium();
-        Stage4_Hard();
+        printResult();
+        // Stage1_Warmup();
+        // Stage2_Easy();
+        // Stage3_Medium();
+        // Stage4_Hard();
+    }
+
+    private static void printResult()
+    {
+        Console.WriteLine("=== Results ===");
+        Print(smallestMissingPositive(new[] { 2, 0, 1, 2, 3, 3, 5 }), 4);      // avg=3 -> {4,5}
+        Print(smallestMissingPositive(new[] { 3, 4, -1, 1 }), 2);
+    }
+
+    public static int smallestMissingPositive(int[] nums)
+    {
+        int n = nums.Length;
+        bool[] present = new bool[n + 1]; // present[i] will be true if i is in nums
+        foreach (int num in nums)
+        {
+            if (num > 0 && num <= n)
+            {
+                present[num] = true;
+            }
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            if (!present[i])
+            {
+                return i; // Return the first missing positive integer
+            }
+        }
+        return n + 1; // If all numbers from 1 to n are present, return n + 1
+
+        // HashSet<int> set = new HashSet<int>(nums);
+        // int smallestMissing = 1;
+
+        // while (set.Contains(smallestMissing))
+        // {
+        //     smallestMissing++;
+        // }
+
+        // return smallestMissing;
     }
 
     // ---------------------------------------------------------------

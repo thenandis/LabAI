@@ -1,0 +1,52 @@
+<!--
+  Directory.Packages.props: Central Package Management (CPM)
+  ==========================================================
+  Each NuGet version is declared once, here. The .csproj files reference packages
+  WITHOUT a version, so every project in the solution uses the same version.
+  This prevents the "diamond dependency / version drift" bugs common in large solutions.
+
+  Library choices worth explaining in an interview:
+   - No MediatR / AutoMapper: both moved to commercial licences in 2025. Plain
+     services and hand-written mapping are faster, easier to debug and free.
+   - No FluentAssertions: v8+ is commercial. xUnit's Assert is enough.
+   - No Swashbuckle: .NET 9+ generates OpenAPI natively (Microsoft.AspNetCore.OpenApi);
+     Scalar provides the interactive UI.
+-->
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!--
+      Transitive pinning: a PackageVersion listed here also overrides versions pulled in
+      INDIRECTLY. NuGet Audit (on by default) fails the build on known-vulnerable packages,
+      and pinning is how you patch a vulnerable transitive dependency without waiting
+      for the parent package (here Microsoft.Data.SqlClient) to release a fix.
+    -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Data access -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.14" />
+
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.14" />
+
+    <!-- Security pin: patches GHSA-846f-f764-76mx / GHSA-2fmv-rv2c-59x7 in the 9.0.x version SqlClient references -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+
+    <!-- Validation -->
+    <PackageVersion Include="FluentValidation" Version="12.2.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
+
+    <!-- API docs -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.19.0" />
+
+    <!-- Testing (xUnit v3 runs on Microsoft.Testing.Platform, opted in via global.json) -->
+    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
+  </ItemGroup>
+</Project>

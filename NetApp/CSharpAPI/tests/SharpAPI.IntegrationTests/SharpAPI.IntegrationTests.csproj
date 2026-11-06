@@ -1,0 +1,23 @@
+<!--
+  INTEGRATION TESTS: the REAL app (middleware, routing, validation, EF Core, SQL)
+  hosted in memory by WebApplicationFactory, talking to an in-memory SQLite database.
+  They catch what unit tests can't: wiring mistakes, serialisation, status codes, SQL translation.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);CA1707;CA2234</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SharpAPI.Api\SharpAPI.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

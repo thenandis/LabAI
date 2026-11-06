@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SharpAPI.Api/SharpAPI.Api.csproj" />
+    <Project Path="src/SharpAPI.Application/SharpAPI.Application.csproj" />
+    <Project Path="src/SharpAPI.Domain/SharpAPI.Domain.csproj" />
+    <Project Path="src/SharpAPI.Infrastructure/SharpAPI.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SharpAPI.IntegrationTests/SharpAPI.IntegrationTests.csproj" />
+    <Project Path="tests/SharpAPI.UnitTests/SharpAPI.UnitTests.csproj" />
+  </Folder>
+</Solution>
